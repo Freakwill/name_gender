@@ -1,5 +1,5 @@
 # name_gender
-guess genders from names (only Chinese names)
+👫guess genders from names, and give names to a boy or a girl (only for Chinese names)
 
 Inspirited by the classification of English names.
 
