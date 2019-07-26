@@ -33,70 +33,99 @@ for n, class_ in enumerate(classes):
 df = pd.DataFrame(data=data, columns=('name', 'gender'))
 
 def get_feature(name):
-    # name -> feature dict
+    """name -> feature dict
+    feature: 
+        X1: 第二个字或空，X2: 最后一个字
+    """
     if len(name)==2:
         return {'first':'', 'second':name[-1]}
     else:
         return {'first':name[-2], 'second':name[-1]}
 
-# get all data
-def get_features(df, get_feature):
-    featrues = []
-    for row in df.iterrows():
-        d = dict(row[1])
-        name = d['name']
-        if isinstance(name, str):
-            if ' ' in name:
-                name = name.replace(' ', '')
-            if '(' not in name:
-                featrues.append((get_feature(name), d['gender'].strip('() ')))
-            else:
-                name = name.partition('(')[0]
-                featrues.append((get_feature(name), d['gender'].strip('() ')))
-    return featrues
-
-def get_train_test(featrues):
-    # split the data into train part and test part
-    N = len(featrues)
-    T = int(N * 0.2)
-    train = featrues[:T]
-    test = featrues[T:]
-    return train, test
-
-def example1():
-    featrues = get_features(df, get_feature)
-    train, test = get_train_test(featrues)
-    classifier = nltk.NaiveBayesClassifier.train(featrues)
-    acc = nltk.classify.accuracy(classifier, test)
-    print(acc)
-
-    # predict
-    new_name = '李春娜'
-    gender = classifier.classify(get_feature(new_name))
-    print('李春娜', gender)
-    classifier.show_most_informative_features(10)
-
 import pypinyin
 def get_feature_pinyin(name):
+    """name -> feature dict
+    feature: 
+        X1: 第二个字的拼音或空，X2: 最后一个字的拼音
+    """
+
     if len(name)==2:
         return {'first':'', 'second':name[-1]}
     else:
         return {'first':pypinyin.lazy_pinyin(name[-2])[0], 'second':pypinyin.lazy_pinyin(name[-1])[0]}
 
-def example2():
-    featrues = get_features(df, get_feature_pinyin)
-    train, test = get_train_test(featrues)
-    classifier = nltk.NaiveBayesClassifier.train(featrues)
-    acc = nltk.classify.accuracy(classifier, test)
-    print(acc)
+# get all data
+def get_features(df, get_feature=get_feature):
+    featrues = []
+    for k, row in df.iterrows():
+        name = row['name']; gender = row['gender']
+        if isinstance(name, str):
+            if ' ' in name:
+                name = name.replace(' ', '')
+            if '(' not in name:
+                featrues.append((get_feature(name), gender.strip('() ')))
+            else:
+                name = name.partition('(')[0]
+                featrues.append((get_feature(name), gender.strip('() ')))
+    return featrues
 
+def get_train_test(featrues, ratio=0.8):
+    # 分割训练数据集、测试数据集
+    N = len(featrues)
+    T = int(N * ratio)
+    train = featrues[:T]
+    test = featrues[T:]
+    return train, test
+
+def example1():
+    # 姓名汉字 -> 性别
+    featrues = get_features(df, get_feature)
+    train, test = get_train_test(featrues)
+    classifier = nltk.NaiveBayesClassifier.train(train)
+    acc = nltk.classify.accuracy(classifier, test)
+    print(f'精确度: {acc:.4}')
     # predict
     new_name = '李春娜'
     gender = classifier.classify(get_feature(new_name))
-    print('李春娜', gender)
-    classifier.show_most_informative_features(5)
+    print(f'{new_name}: {gender}')
+    classifier.show_most_informative_features(100)
 
-print('With Chinese:')
-example1()
-print('With Pinyin:')
-example2()
+
+def example2():
+    # 姓名拼音 -> 性别
+    featrues = get_features(df, get_feature_pinyin)
+    train, test = get_train_test(featrues)
+    classifier = nltk.NaiveBayesClassifier.train(train)
+    acc = nltk.classify.accuracy(classifier, test)
+    print(f'精确度: {acc:.4}')
+    # predict
+    new_name = '叶娅芬'
+    gender = classifier.classify(get_feature_pinyin(new_name))
+    print('叶娅芬', gender)
+    classifier.show_most_informative_features(10)
+
+def example3():
+    # 自动取名
+    def get_features_(df, get_feature=get_feature):
+        featrues = get_features(df, get_feature)
+        f = []
+        for n, g in featrues:
+            f.append(({'gender':g, 'first':n['first']}, n['second']))
+        return f
+    featrues = get_features_(df, get_feature)
+    classifier = nltk.NaiveBayesClassifier.train(featrues)
+    gender = '女'
+    first = '怡'
+    following = classifier.prob_classify({'gender':gender, 'first':first})
+    x = following.generate()
+    print(f'{gender}: {first}{x}')
+
+
+if __name__ == '__main__':
+    
+    print('With Chinese:')
+    example1()
+    print('With Pinyin:')
+    example2()
+    print('取名字:(给出性别和第一个字)')
+    example3()
