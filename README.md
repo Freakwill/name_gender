@@ -10,9 +10,11 @@ Give name automaticly
     女: 怡皓
 
 ## test results
+Seperate the data as train (80%) and test(20%) data, before training and testing
+
     With Chinese:
-    0.9772727272727273
-    李春娜 女
+    精确度: 0.7551
+    李春娜: 女
     Most Informative Features
                        first = '佳'                 女 : 男      =      3.0 : 1.0
                        first = '春'                 女 : 男      =      2.1 : 1.0
@@ -20,8 +22,8 @@ Give name automaticly
                        first = '红'                 女 : 男      =      2.1 : 1.0
                        first = '怡'                 女 : 男      =      2.1 : 1.0
     With Pinyin:
-    0.9772727272727273
-    李春娜 女
+    精确度: 0.6735
+    叶娅芬: 女
     Most Informative Features
                       second = 'jie'               男 : 女      =      4.3 : 1.0
                       second = 'qing'              女 : 男      =      3.5 : 1.0
