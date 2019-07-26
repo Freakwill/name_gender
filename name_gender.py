@@ -101,7 +101,7 @@ def example2():
     # predict
     new_name = '叶娅芬'
     gender = classifier.classify(get_feature_pinyin(new_name))
-    print('叶娅芬', gender)
+    print(f'{new_name}: {gender}')
     classifier.show_most_informative_features(10)
 
 def example3():
