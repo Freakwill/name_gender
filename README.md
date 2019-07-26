@@ -3,6 +3,12 @@ guess genders from names (only Chinese names)
 
 Inspirited by the classification of English names.
 
+## New feature
+Give name automaticly
+
+    取名字:(给出性别和第一个字)
+    女: 怡皓
+
 ## test results
     With Chinese:
     0.9772727272727273
