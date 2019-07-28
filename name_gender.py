@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+"""通过姓名（汉字或拼音，猜测性别）
+
+还能自动取名。这是你见过的最好玩的Bayes分类项目。*_*
+"""
+
 import pandas as pd
 import numpy as np
 
@@ -77,34 +82,26 @@ def get_train_test(featrues, ratio=0.8):
     test = featrues[T:]
     return train, test
 
-def example1():
-    # 姓名汉字 -> 性别
-    featrues = get_features(df, get_feature)
+def gender_classifier(df, f=get_feature):
+    featrues = get_features(df, f)
     train, test = get_train_test(featrues)
     classifier = nltk.NaiveBayesClassifier.train(train)
     acc = nltk.classify.accuracy(classifier, test)
+    return classifier, acc
+
+def show_gender(pinyin=False):
+    # 姓名 -> 性别
+    f = get_feature_pinyin if pinyin else get_feature
+    classifier, acc = gender_classifier(df, f)
     print(f'精确度: {acc:.4}')
     # predict
-    new_name = '李春娜'
-    gender = classifier.classify(get_feature(new_name))
-    print(f'{new_name}: {gender}')
-    classifier.show_most_informative_features(100)
-
-
-def example2():
-    # 姓名拼音 -> 性别
-    featrues = get_features(df, get_feature_pinyin)
-    train, test = get_train_test(featrues)
-    classifier = nltk.NaiveBayesClassifier.train(train)
-    acc = nltk.classify.accuracy(classifier, test)
-    print(f'精确度: {acc:.4}')
-    # predict
-    new_name = '叶娅芬'
-    gender = classifier.classify(get_feature_pinyin(new_name))
+    new_name = '陈乔恩'
+    gender = classifier.classify(f(new_name))
     print(f'{new_name}: {gender}')
     classifier.show_most_informative_features(10)
 
-def example3():
+
+def give_name():
     # 自动取名
     def get_features_(df, get_feature=get_feature):
         featrues = get_features(df, get_feature)
@@ -124,8 +121,8 @@ def example3():
 if __name__ == '__main__':
     
     print('With Chinese:')
-    example1()
+    show_gender()
     print('With Pinyin:')
-    example2()
+    show_gender(True)
     print('取名字:(给出性别和第一个字)')
-    example3()
+    give_name()
