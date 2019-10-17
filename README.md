@@ -43,7 +43,9 @@ Seperate the data as train (80%) and test(20%) data, before training and testing
 1. Girls' names are repeated more likely then boy's. They are named simply by their parents.
 2. Many boys have name with `jie`
 
-## Color egg
-😂
+## Color egg😂
+
     With Chinese:
     岳不群: 女
+    With Chinese:
+    蔡徐坤: 女
