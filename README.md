@@ -10,7 +10,7 @@ Give name automaticly
     女: 怡皓
 
 ## test results
-Seperate the data as train (80%) and test(20%) data, before training and testing
+Seperate the data as train (90%) and test(10%) data, before training and testing
 
     With Chinese:
     李春娜: 女
