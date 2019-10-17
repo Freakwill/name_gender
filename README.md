@@ -13,7 +13,6 @@ Give name automaticly
 Seperate the data as train (80%) and test(20%) data, before training and testing
 
     With Chinese:
-    精确度: 0.7551
     李春娜: 女
     Most Informative Features
                        first = '佳'                 女 : 男      =      3.0 : 1.0
@@ -22,7 +21,6 @@ Seperate the data as train (80%) and test(20%) data, before training and testing
                        first = '红'                 女 : 男      =      2.1 : 1.0
                        first = '怡'                 女 : 男      =      2.1 : 1.0
     With Pinyin:
-    精确度: 0.6735
     叶娅芬: 女
     Most Informative Features
                       second = 'jie'               男 : 女      =      4.3 : 1.0
