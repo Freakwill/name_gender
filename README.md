@@ -46,6 +46,4 @@ Seperate the data as train (90%) and test(10%) data, before training and testing
 ## Color egg😂
 
     With Chinese:
-    岳不群: 女
-    With Chinese:
     蔡徐坤: 女
