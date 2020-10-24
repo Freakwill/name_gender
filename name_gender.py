@@ -11,7 +11,12 @@ import numpy as np
 
 import nltk
 
-path = 'namelist.xls' # name list of students in zjc
+try:
+    import pypinyin
+except:
+    print('If you want to use pinyin instead of characters, then you have to download pypinyin')
+
+path = '/Users/william/Teaching/student lists/namelist.xls' # name list of students in zjc
 
 classes = ['xinji%d' % n for n in range(13, 19)] + ['xinjiang1', 'xinjiang2']
 for n, class_ in enumerate(classes):
@@ -52,7 +57,7 @@ def get_feature(name):
             print(name)
             return {'first':'', 'second':''}
 
-import pypinyin
+
 def get_feature_pinyin(name):
     """name -> feature dict
     feature: 
@@ -107,7 +112,7 @@ def show_gender(name, pinyin=False, show_acc=False):
     classifier.show_most_informative_features(10)
 
 
-def give_name():
+def give_name(first='洁', gender='女'):
     # 自动取名
     def get_features_(df, get_feature=get_feature):
         featrues = get_features(df, get_feature)
@@ -117,8 +122,6 @@ def give_name():
         return f
     featrues = get_features_(df, get_feature)
     classifier = nltk.NaiveBayesClassifier.train(featrues)
-    gender = '女'
-    first = '洁'
     following = classifier.prob_classify({'gender':gender, 'first':first})
     x = following.generate()
     print(f'{gender}: {first}{x}')
@@ -127,8 +130,8 @@ def give_name():
 if __name__ == '__main__':
     
     print('With Chinese:')
-    show_gender("李春娜")
+    show_gender("蔡徐坤")
     print('With Pinyin:')
-    show_gender("叶娅芬", True)
-    # print('取名字:(给出性别和第一个字)')
-    # give_name()
+    show_gender("蔡徐坤", True)
+    print('取名字:(给出性别和第一个字)')
+    give_name()
