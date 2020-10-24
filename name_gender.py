@@ -16,14 +16,14 @@ try:
 except:
     print('If you want to use pinyin instead of characters, then you have to download pypinyin')
 
-path = '/Users/william/Teaching/student lists/namelist.xls' # name list of students in zjc
+PATH = 'namelist.xls' # name list of students in zjc
 
 classes = ['xinji%d' % n for n in range(13, 19)] + ['xinjiang1', 'xinjiang2']
 for n, class_ in enumerate(classes):
     
-    df = pd.read_excel(path, sheet_name=class_)
+    df = pd.read_excel(PATH, sheet_name=class_)
     if not (set(df.columns) & {'学号','no','No', 'no.', 'No.'}):
-        df = pd.read_excel(path, sheet_name=class_, skiprows=1)
+        df = pd.read_excel(PATH, sheet_name=class_, skiprows=1)
     if 'name' in df.columns:
         name_key = 'name'
     else:
