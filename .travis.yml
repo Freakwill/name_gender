@@ -2,6 +2,7 @@ language: python
 
 before_script:
   - pip install pandas numpy nltk
+  - pip install pypinyin
   
 script:
   - test.sh
