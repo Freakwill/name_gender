@@ -1,0 +1,7 @@
+language: python
+
+before_script:
+  - pip install pandas numpy nltk
+  
+script:
+  - test.sh
