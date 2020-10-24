@@ -47,3 +47,6 @@ Seperate the data as train (90%) and test(10%) data, before training and testing
 
     With Chinese:
     蔡徐坤: 女
+    
+## Comment
+On Oct 24th 2020, I ran travis-ci successfully at first time after several failure tries. I was very happy. It was a good beginning.
