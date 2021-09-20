@@ -22,7 +22,7 @@ notifications:
 deploy:
   provider: pypi
   user: Williamzjc
-  password: Python2017
+  password: ********
   on:
     python: 3.8
     tags: true
