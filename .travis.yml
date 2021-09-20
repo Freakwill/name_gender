@@ -17,3 +17,13 @@ script:
 
 notifications:
   email: false
+
+
+deploy:
+  provider: pypi
+  user: Williamzjc
+  password: Python2017
+  on:
+    python: 3.8
+    tags: true
+    branch: master
