@@ -45,17 +45,16 @@ df = pd.DataFrame(data=data, columns=('name', 'gender'))
 def get_feature(name):
     """name -> feature dict
     feature: 
-        X1: 第二个字或空，X2: 最后一个字
+        X1: 最后第二个字或空，X2: 最后一个字
     """
 
     if len(name)==2:
         return {'first':'', 'second':name[-1]}
+    elif len(name)>=3:
+        return {'first':name[-2], 'second':name[-1]}
     else:
-        try:
-            return {'first':name[-2], 'second':name[-1]}
-        except IndexError:
-            print(name)
-            return {'first':'', 'second':''}
+        print(name, 'is a invalid name!')
+        return {'first':'', 'second':''}
 
 
 def get_feature_pinyin(name):
@@ -70,8 +69,8 @@ def get_feature_pinyin(name):
         return {'first':pypinyin.lazy_pinyin(name[-2])[0], 'second':pypinyin.lazy_pinyin(name[-1])[0]}
 
 # get all data
-def get_features(df, get_feature=get_feature):
-    # -> [(feature dict, label),...]
+def get_data(df, get_feature=get_feature):
+    # dataframe -> List[(feature dict, label),...]
     featrues = []
     for k, row in df.iterrows():
         name = row['name']; gender = row['gender']
@@ -94,8 +93,8 @@ def get_train_test(featrues, ratio=0.9):
     return train, test
 
 def gender_classifier(df, f=get_feature):
-    featrues = get_features(df, f)
-    train, test = get_train_test(featrues)
+    data = get_data(df, f)
+    train, test = get_train_test(data)
     classifier = nltk.NaiveBayesClassifier.train(train)
     acc = nltk.classify.accuracy(classifier, test)
     return classifier, acc
@@ -112,16 +111,14 @@ def show_gender(name, pinyin=False, show_acc=False):
     classifier.show_most_informative_features(10)
 
 
-def give_name(first='洁', gender='女'):
+def give_name(first='欣', gender='女'):
     # 自动取名
-    def get_features_(df, get_feature=get_feature):
-        featrues = get_features(df, get_feature)
-        f = []
-        for n, g in featrues:
-            f.append(({'gender':g, 'first':n['first']}, n['second']))
-        return f
-    featrues = get_features_(df, get_feature)
-    classifier = nltk.NaiveBayesClassifier.train(featrues)
+    def get_data_(df, get_feature=get_feature):
+        data = get_data(df, get_feature)
+        return [({'gender':g, 'first':n['first']}, n['second']) for n, g in data]
+
+    data = get_data_(df, get_feature)
+    classifier = nltk.NaiveBayesClassifier.train(data)
     following = classifier.prob_classify({'gender':gender, 'first':first})
     x = following.generate()
     print(f'{gender}: {first}{x}')
@@ -132,6 +129,6 @@ if __name__ == '__main__':
     print('With Chinese:')
     show_gender("蔡徐坤")
     print('With Pinyin:')
-    show_gender("蔡徐坤", True)
+    show_gender("曹楚奇", True)
     print('取名字:(给出性别和第一个字)')
-    give_name()
+    give_name(first='红')
